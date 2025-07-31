@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Course Roadmap</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f0f4f8; /* Light blue-gray background */
+            font-family: 'Inter', sans-serif; /* Fallback font */
+            overflow: hidden; /* Ensure no scrollbars */
+            user-select: none; /* Prevent text selection during drag */
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+        }
+        /* Import Google Font for 'Inter' */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap');
+
+        svg {
+            display: block;
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.15); /* Subtle shadow for the whole picture */
+            border-radius: 15px; /* Rounded corners for the entire SVG area */
+            background-color: #e0f2f7; /* Light sky blue background for the SVG */
+        }
+
+        /* Road Styling */
+        .road-main {
+            stroke: #4b5563; /* Dark grey for road */
+            stroke-width: 55; /* Enlarged road width */
+            fill: none;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+        .road-dashed-line {
+            stroke: #fefefe; /* White for dashed line */
+            stroke-width: 10; /* Enlarged dashed line width */
+            fill: none;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            stroke-dasharray: 25 25; /* Dashed pattern */
+        }
+
+        /* Sign Styling */
+        .sign-body, .pre-unit-sign-body, .period-sign-body { /* Apply transition to all sign types */
+            transition: all 0.3s ease-in-out; /* Smooth transition for highlight */
+        }
+        .sign-body {
+            fill: #fefce8; /* Light yellow for signs */
+            stroke: #d97706; /* Orange border for signs */
+            stroke-width: 4;
+        }
+        .sign-post {
+            fill: #78350f; /* Brown for sign posts */
+        }
+        .unit-number-text {
+            font-family: 'Inter', sans-serif;
+            font-size: 40px;
+            font-weight: 800;
+            fill: #b45309; /* Darker orange */
+            text-anchor: middle;
+        }
+        .unit-title-text {
+            font-family: 'Inter', sans-serif;
+            font-size: 16px; /* Default reduced font size for unit titles */
+            font-weight: 700;
+            fill: #1e3a8a; /* Dark blue for title */
+            text-anchor: middle;
+        }
+        /* Specific adjustment for Unit 1's text */
+        .unit-1-title-text {
+            font-size: 14px; /* Smaller font size for Unit 1 */
+        }
+        /* Specific adjustment for Unit 4's text */
+        .unit-4-title-text {
+            font-size: 14px; /* Even smaller font size for Unit 4 */
+        }
+        /* Adjusted font sizes for new unit names */
+        .unit-title-text-small {
+            font-size: 12px; /* Smaller for longer titles */
+        }
+        .unit-title-text-medium {
+            font-size: 14px; /* Medium for slightly longer titles */
+        }
+
+
+        /* Highlight/Spotlight effect for active unit signs */
+        .unit-active .sign-body,
+        .unit-active .pre-unit-sign-body,
+        .unit-active .period-sign-body { /* Apply to all types of signs */
+            transform: scale(1.2); /* Increased enlargement */
+            box-shadow: 0 0 25px rgba(217, 119, 6, 0.9); /* Stronger orange glow */
+            stroke: #fbbf24; /* Brighter orange border */
+        }
+        .unit-active .unit-number-text {
+            fill: #f59e0b; /* Lighter orange for number */
+        }
+        .unit-active .unit-title-text {
+            fill: #1c64f2; /* Brighter blue for title */
+        }
+        .unit-active .pre-unit-title-text { /* Ensure pre-unit text also changes color */
+            fill: #009688; /* Slightly lighter teal for pre-unit text */
+        }
+        .unit-active .period-text { /* Ensure period text also changes color */
+            fill: #a855f7; /* Brighter violet for period text */
+        }
+
+
+        /* Pre-Unit Sign Styling */
+        .pre-unit-sign-body {
+            fill: #e0f7fa; /* Light blue for pre-unit sign */
+            stroke: #00796b; /* Darker teal border */
+            stroke-width: 3;
+            width: 100px; /* Smaller width */
+            height: 60px; /* Smaller height */
+        }
+        .pre-unit-sign-post {
+            fill: #5d4037; /* Dark brown for post */
+        }
+        .pre-unit-title-text {
+            font-family: 'Inter', sans-serif;
+            font-size: 13px; /* Further reduced font size for pre-unit title */
+            font-weight: 700;
+            fill: #004d40; /* Dark teal for text */
+            text-anchor: middle;
+        }
+
+        /* Period Sign Styling */
+        .period-sign-body {
+            fill: #f3e8ff; /* Light violet for period sign */
+            stroke: #7c3aed; /* Darker violet border */
+            stroke-width: 2;
+            width: 80px; /* Small width */
+            height: 40px; /* Small height */
+        }
+        .period-sign-post {
+            fill: #5d4037; /* Dark brown for post */
+        }
+        .period-text {
+            font-family: 'Inter', sans-serif;
+            font-size: 18px; /* Font size for period text */
+            font-weight: 700;
+            fill: #6d28d9; /* Dark violet for text */
+            text-anchor: middle;
+        }
+
+
+        /* Date Text Styling */
+        .date-text {
+            font-family: 'Inter', sans-serif;
+            font-size: 30px;
+            font-weight: 600;
+            fill: #065f46; /* Dark green for dates */
+            text-anchor: middle;
+        }
+
+        /* Header Text Styling */
+        .header-title {
+            font-family: 'Inter', sans-serif;
+            font-size: 60px;
+            font-weight: 800;
+            fill: #1d4ed8; /* Blue for title */
+            text-anchor: middle;
+        }
+        .header-subtitle {
+            font-family: 'Inter', sans-serif;
+            font-size: 30px;
+            font-weight: 600;
+            fill: #1e40af; /* Darker blue for subtitle */
+            text-anchor: middle;
+        }
+
+        /* Capitol Building Styling */
+        .capitol-dome { fill: #f0f0f0; stroke: #777; stroke-width: 2; }
+        .capitol-roof { fill: #8b0000; } /* Dark Red */
+        .capitol-columns { fill: #e0e0e0; stroke: #777; stroke-width: 1; }
+        .capitol-base { fill: #c0c0c0; stroke: #777; stroke-width: 2; }
+
+        /* Gavel Styling */
+        .gavel-head { fill: #8B4513; } /* SaddleBrown */
+        .gavel-band { fill: #C0C0C0; } /* Silver */
+        .gavel-handle { fill: #A0522D; } /* Siennna */
+        .gavel-outline { stroke: #333; stroke-width: 1.5; }
+
+
+        /* School Bus Styling */
+        #schoolBus {
+            cursor: grab; /* Indicate draggable */
+            touch-action: none; /* Prevent browser default touch actions */
+        }
+        #schoolBus:active {
+            cursor: grabbing; /* Indicate dragging */
+        }
+        .bus-body { fill: #FFD700; } /* Yellow */
+        .bus-top { fill: #FFC107; } /* Darker Yellow */
+        .bus-wheel { fill: #333; } /* Dark Grey */
+        .bus-wheel-detail { fill: #555; } /* Lighter Grey */
+        .bus-window { fill: #ADD8E6; } /* Light Blue */
+        .bus-stop-sign-base { fill: #FF0000; } /* Red */
+        .bus-stop-sign-text { font-family: Arial, sans-serif; font-size: 4px; fill: white; text-anchor: middle; }
+        .bus-light { fill: orange; }
+
+        /* Kid Styling */
+        .kid-skin-1 { fill: #FFDAB9; } /* PeachPuff */
+        .kid-skin-2 { fill: #F0B27A; } /* Tan */
+        .kid-skin-3 { fill: #D2B48C; } /* BurlyWood */
+        .kid-skin-4 { fill: #8B4513; } /* SaddleBrown */
+        .kid-hair-1 { fill: #654321; } /* Dark Brown */
+        .kid-hair-2 { fill: #36454F; } /* Charcoal */
+        .kid-hair-3 { fill: #FFD700; } /* Gold */
+        .kid-shirt-1 { fill: #6495ED; } /* CornflowerBlue */
+        .kid-shirt-2 { fill: #FF6347; } /* Tomato */
+        .kid-shirt-3 { fill: #3CB371; } /* MediumSeaGreen */
+
+        /* Mr. Koppe Styling */
+        .koppe-head { fill: #F0B27A; } /* Skin tone */
+        .koppe-body { fill: #1E90FF; } /* DodgerBlue shirt */
+        .koppe-hair-color { fill: #36454F; } /* Charcoal for hair */
+        .koppe-glasses-frame { stroke: #333; stroke-width: 1; fill: none; }
+        .koppe-glasses-lens { fill: rgba(255, 255, 255, 0.3); }
+
+
+        /* Class Name Styling */
+        .class-name-text {
+            font-family: 'Inter', sans-serif;
+            font-size: 28px;
+            font-weight: 700;
+            fill: #374151; /* Dark gray */
+            text-anchor: end; /* Align to the right */
+        }
+
+        /* Syllabus Text Styling */
+        .syllabus-text {
+            font-family: 'Inter', sans-serif;
+            font-size: 24px;
+            font-weight: 700;
+            fill: #374151; /* Dark gray */
+            text-anchor: end; /* Align to the right */
+        }
+    </style>
+</head>
+<body>
+
+    <svg id="roadmapSvg" width="1200" height="675" viewBox="0 0 1200 675">
+        <!-- Background Elements (Optional - can add hills, clouds etc.) -->
+        <rect x="0" y="0" width="1200" height="675" fill="#e0f2f7"/> <!-- Sky background -->
+        <rect x="0" y="500" width="1200" height="175" fill="#81c784"/> <!-- Green ground -->
+
+        <!-- Winding Road Path -->
+        <!-- M = Move to, C = Cubic Bezier Curve (x1 y1, x2 y2, x y) -->
+        <path id="roadPath" class="road-main" d="M 100 550 C 300 400, 450 600, 600 500 S 900 300, 1100 450"/>
+        <path class="road-dashed-line" d="M 100 550 C 300 400, 450 600, 600 500 S 900 300, 1100 450"/>
+
+        <!-- Header Title -->
+        <text x="600" y="80" class="header-title">American Democracy</text>
+        <text x="600" y="120" class="header-subtitle">A Roadtrip with Mr. Koppe</text>
+
+        <!-- Syllabus Text -->
+        <text x="1180" y="40" class="syllabus-text">Syllabus</text>
+
+        <!-- Capitol Building (Left Graphic) -->
+        <g transform="translate(100, 60) scale(0.7)">
+            <svg viewBox="0 0 100 100" width="100" height="100">
+                <!-- Dome -->
+                <ellipse cx="50" cy="25" rx="30" ry="15" class="capitol-dome"/>
+                <rect x="45" y="10" width="10" height="15" class="capitol-dome"/> <!-- Small top -->
+                <!-- Roof/Pediment -->
+                <polygon points="20 40, 80 40, 50 20" class="capitol-roof"/>
+                <!-- Main Building Base -->
+                <rect x="15" y="40" width="70" height="40" rx="5" class="capitol-base"/>
+                <!-- Columns -->
+                <rect x="20" y="45" width="8" height="30" class="capitol-columns"/>
+                <rect x="35" y="45" width="8" height="30" class="capitol-columns"/>
+                <rect x="50" y="45" width="8" height="30" class="capitol-columns"/>
+                <rect x="65" y="45" width="8" height="30" class="capitol-columns"/>
+            </svg>
+        </g>
+
+        <!-- Gavel (Right Graphic) -->
+        <g transform="translate(970, 60) scale(0.8)">
+            <svg viewBox="0 0 100 100" width="100" height="100">
+                <!-- Gavel Head -->
+                <rect x="10" y="40" width="60" height="20" rx="5" class="gavel-head gavel-outline"/>
+                <rect x="65" y="42" width="5" height="16" class="gavel-band gavel-outline"/>
+                <!-- Handle -->
+                <rect x="35" y="60" width="10" height="35" rx="3" class="gavel-handle gavel-outline"/>
+                <circle cx="40" cy="95" r="5" class="gavel-handle gavel-outline"/>
+            </svg>
+        </g>
+
+
+        <!-- School Bus at the start of the road -->
+        <g id="schoolBus" transform="translate(40, 520) scale(1.0)"> <!-- Increased scale for bus -->
+            <!-- Bus SVG adjusted for length and internal positioning -->
+            <svg viewBox="0 0 120 60" width="180" height="90">
+                <rect x="5" y="15" width="110" height="30" rx="8" class="bus-body"/>
+                <rect x="15" y="10" width="90" height="10" rx="3" class="bus-top"/>
+                <circle cx="25" cy="45" r="8" class="bus-wheel"/>
+                <circle cx="95" cy="45" r="8" class="bus-wheel"/> <!-- Adjusted x for longer bus -->
+                <rect x="23" y="43" width="4" height="4" rx="2" class="bus-wheel-detail"/>
+                <rect x="93" y="43" width="4" height="4" rx="2" fill="#555"/> <!-- Wheel Detail -->
+
+                <!-- Windows adjusted for longer bus -->
+                <rect x="20" y="20" width="10" height="15" rx="2" class="bus-window"/>
+                <rect x="40" y="20" width="10" height="15" rx="2" class="bus-window"/>
+                <rect x="60" y="20" width="10" height="15" rx="2" class="bus-window"/>
+                <rect x="80" y="20" width="10" height="15" rx="2" class="bus-window"/>
+                <rect x="100" y="20" width="10" height="15" rx="2" class="bus-window"/> <!-- New window position -->
+
+                <!-- STOP sign moved to the left side of the bus -->
+                <rect x="5" y="25" width="5" height="5" rx="1" class="bus-stop-sign-base"/>
+                <polygon points="7.5,22 12.5,25 12.5,30 7.5,33 2.5,30 2.5,25" class="bus-stop-sign-base"/>
+                <text x="7.5" y="28" font-family="Arial" font-size="4" fill="white" text-anchor="middle" alignment-baseline="middle">STOP</text>
+
+                <!-- Lights adjusted for stop sign move -->
+                <circle cx="10" cy="22" r="2" class="bus-light"/> <!-- Left light -->
+                <circle cx="100" cy="22" r="2" class="bus-light"/> <!-- Right light -->
+
+                <!-- Mr. Koppe inside the front (right-most) window -->
+                <g transform="translate(98, 10) scale(1.8)"> <!-- Adjusted position and increased scale for Mr. Koppe -->
+                    <!-- Head -->
+                    <circle cx="5" cy="5" r="5" class="koppe-head"/>
+                    <!-- Hair (curly) -->
+                    <path d="M2 2 Q 5 0, 8 2 Q 10 4, 8 6 Q 5 8, 2 6 Q 0 4, 2 2 Z" class="koppe-hair-color"/>
+                    <!-- Glasses -->
+                    <circle cx="3" cy="6" r="2.5" class="koppe-glasses-frame"/>
+                    <circle cx="7" cy="6" r="2.5" class="koppe-glasses-frame"/>
+                    <line x1="5.5" y1="6" x2="4.5" y2="6" class="koppe-glasses-frame"/>
+                    <circle cx="3" cy="6" r="2" class="koppe-glasses-lens"/>
+                    <circle cx="7" cy="6" r="2" class="koppe-glasses-lens"/>
+                    <!-- Body (visible from window) -->
+                    <rect x="0" y="10" width="10" height="10" class="koppe-body"/>
+                </g>
+
+                <!-- Kids popping out of windows (adjusted positions to be inside windows) -->
+                <!-- Kid 1 (Window at x=20) -->
+                <rect x="20" y="20" width="10" height="10" class="kid-shirt-1"/> <!-- Body -->
+                <circle cx="25" cy="22" r="5" class="kid-skin-1"/> <!-- Head -->
+                <rect x="22" y="17" width="6" height="3" class="kid-hair-1"/> <!-- Hair -->
+
+                <!-- Kid 2 (Window at x=40) -->
+                <rect x="40" y="20" width="10" height="10" class="kid-shirt-2"/>
+                <circle cx="45" cy="22" r="5" class="kid-skin-2"/>
+                <rect x="42" y="17" width="6" height="3" class="kid-hair-2"/>
+
+                <!-- Kid 3 (Window at x=60) -->
+                <rect x="60" y="20" width="10" height="10" class="kid-shirt-3"/>
+                <circle cx="65" cy="22" r="5" class="kid-skin-3"/>
+                <rect x="62" y="17" width="6" height="3" class="kid-hair-3"/>
+
+                <!-- Kid 4 (Window at x=80) -->
+                <rect x="80" y="20" width="10" height="10" class="kid-shirt-1"/>
+                <circle cx="85" cy="22" r="5" class="kid-skin-4"/>
+                <rect x="82" y="17" width="6" height="3" class="kid-hair-1"/>
+
+            </svg>
+        </g>
+
+        <!-- Start Date -->
+        <g transform="translate(100, 470)">
+            <text x="0" y="0" class="date-text">August 18th</text>
+        </g>
+
+        <!-- End Date -->
+        <g transform="translate(1100, 360)">
+            <text x="0" y="0" class="date-text">Dec 19th</text>
+        </g>
+
+        <!-- Unit 1 Sign -->
+        <a href="https://drive.google.com/drive/folders/1XbNgzsOhOPTGbt0p5_x9cOmtOYQojCZf" target="_blank">
+            <g id="unit-sign-1" transform="translate(250, 350)">
+                <rect x="-75" y="-50" width="150" height="100" rx="10" class="sign-body"/>
+                <rect x="-5" y="50" width="10" height="50" class="sign-post"/>
+                <text x="0" y="-10" class="unit-number-text">UNIT 1</text>
+                <text x="0" y="15" class="unit-title-text unit-title-text-medium">Foundations of</text>
+                <text x="0" y="40" class="unit-title-text unit-title-text-medium">Democracy</text>
+            </g>
+        </a>
+
+        <!-- Unit 2 Sign -->
+        <a href="https://drive.google.com/drive/folders/1f-hQmUzGh5M8ojH3JrJiwdZh8ZuicaoI" target="_blank">
+            <g id="unit-sign-2" transform="translate(400, 580)">
+                <rect x="-75" y="-50" width="150" height="100" rx="10" class="sign-body"/>
+                <rect x="-5" y="50" width="10" height="50" class="sign-post"/>
+                <text x="0" y="-10" class="unit-number-text">UNIT 2</text>
+                <text x="0" y="15" class="unit-title-text">Legislative</text>
+                <text x="0" y="40" class="unit-title-text">Branch</text>
+            </g>
+        </a>
+
+        <!-- Unit 3 Sign (Moved slightly left) -->
+        <a href="https://drive.google.com/drive/folders/1kDozj9_zRp5sCL0rO_pmoUOzD8-TrqDY" target="_blank">
+            <g id="unit-sign-3" transform="translate(550, 400)">
+                <rect x="-75" y="-50" width="150" height="100" rx="10" class="sign-body"/>
+                <rect x="-5" y="50" width="10" height="50" class="sign-post"/>
+                <text x="0" y="-10" class="unit-number-text">UNIT 3</text>
+                <text x="0" y="15" class="unit-title-text">Executive</text>
+                <text x="0" y="40" class="unit-title-text">Branch</text>
+            </g>
+        </a>
+
+        <!-- Unit 4 Sign (Moved to Unit 6's original position) -->
+        <a href="https://drive.google.com/drive/folders/1RrDZVnkLVOUtKfKqja6iVC_Cck2QUBzr" target="_blank">
+            <g id="unit-sign-4" transform="translate(700, 550)">
+                <rect x="-75" y="-50" width="150" height="100" rx="10" class="sign-body"/>
+                <rect x="-5" y="50" width="10" height="50" class="sign-post"/>
+                <text x="0" y="-10" class="unit-number-text">UNIT 4</text>
+                <text x="0" y="15" class="unit-title-text">Judicial</text>
+                <text x="0" y="40" class="unit-title-text">Branch</text>
+            </g>
+        </a>
+
+        <!-- Unit 5 Sign (Moved further left) -->
+        <a href="https://drive.google.com/drive/folders/10A_X22qg73V7aQ4FkfwMu32zA44ympjA" target="_blank">
+            <g id="unit-sign-5" transform="translate(750, 280)">
+                <rect x="-75" y="-50" width="150" height="100" rx="10" class="sign-body"/>
+                <rect x="-5" y="50" width="10" height="50" class="sign-post"/>
+                <text x="0" y="-10" class="unit-number-text">UNIT 5</text>
+                <text x="0" y="15" class="unit-title-text unit-title-text-large">Civil Rights</text>
+                <text x="0" y="40" class="unit-title-text unit-title-text-large">& Liberties</text>
+            </g>
+        </a>
+
+        <!-- Unit 6 Sign (Moved further left) -->
+        <a href="https://drive.google.com/drive/folders/1Y1GYnrb6OBXHiGz6fFF4aFdZ1XfgL1cS" target="_blank">
+            <g id="unit-sign-6" transform="translate(900, 380)">
+                <rect x="-75" y="-50" width="150" height="100" rx="10" class="sign-body"/>
+                <rect x="-5" y="50" width="10" height="50" class="sign-post"/>
+                <text x="0" y="-10" class="unit-number-text">UNIT 6</text>
+                <text x="0" y="15" class="unit-title-text unit-title-text-medium">Political</text>
+                <text x="0" y="40" class="unit-title-text unit-title-text-medium">Ideologies</l>
+            </g>
+        </a>
+
+        <!-- Unit 7 Sign (at the end of the road) -->
+        <a href="https://drive.google.com/drive/folders/1lvNBMiWaFnEXoBRFYrAlB65e0H-2Dr-C" target="_blank">
+            <g id="unit-sign-7" transform="translate(1100, 480)">
+                <rect x="-75" y="-50" width="150" height="100" rx="10" class="sign-body"/>
+                <rect x="-5" y="50" width="10" height="50" class="sign-post"/>
+                <text x="0" y="-10" class="unit-number-text">UNIT 7</text>
+                <text x="0" y="15" class="unit-title-text unit-title-text-medium">Political</text>
+                <text x="0" y="40" class="unit-title-text unit-title-text-medium">Participation</text>
+            </g>
+        </a>
+
+        <!-- Mr. Koppe's Class on the bottom right -->
+        <text x="1180" y="650" class="class-name-text">Mr. Koppe's Class</text>
+
+        <!-- PRE-UNIT FUN Sign (Bottom Left) -->
+        <a href="https://drive.google.com/drive/folders/1w2OuKMAt_vNXebaqmhlpp8_N4gSnRqKY" target="_blank">
+            <g id="pre-unit-sign" transform="translate(115, 615)"> <!-- Adjusted translate values for further right and down -->
+                <rect x="-50" y="-30" width="100" height="60" rx="8" class="pre-unit-sign-body"/>
+                <rect x="-4" y="30" width="8" height="30" class="pre-unit-sign-post"/>
+                <text x="0" y="10" class="pre-unit-title-text">PRE-UNIT FUN</text>
+            </g>
+        </a>
+
+        <!-- Period 1 Sign (Top Left) -->
+        <a href="https://classroom.google.com/c/Nzc3NTExOTE1NzA3?cjc=uhxbpwmv" target="_blank">
+            <g id="period-sign-1" transform="translate(20, 20)">
+                <rect x="0" y="0" width="80" height="40" rx="5" class="period-sign-body"/>
+                <rect x="36" y="40" width="8" height="20" class="period-sign-post"/>
+                <text x="40" y="25" class="period-text">P. 1</text>
+            </g>
+        </a>
+
+        <!-- Period 3 Sign (Top Left, below P1) -->
+        <g id="period-sign-3" transform="translate(20, 90)">
+            <rect x="0" y="0" width="80" height="40" rx="5" class="period-sign-body"/>
+            <rect x="36" y="40" width="8" height="20" class="period-sign-post"/>
+            <text x="40" y="25" class="period-text">P. 3</text>
+        </g>
+
+        <!-- Period 4 Sign (Top Left, below P3) -->
+        <g id="period-sign-4" transform="translate(20, 160)">
+            <rect x="0" y="0" width="80" height="40" rx="5" class="period-sign-body"/>
+            <rect x="36" y="40" width="8" height="20" class="period-sign-post"/>
+            <text x="40" y="25" class="period-text">P. 4</text>
+        </g>
+
+    </svg>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const roadmapSvg = document.getElementById('roadmapSvg');
+            const schoolBus = document.getElementById('schoolBus');
+            const roadPath = document.getElementById('roadPath');
+
+            let isDragging = false;
+            let currentPathLength = 0; // Current position along the path
+            let pathTotalLength = roadPath.getTotalLength(); // Changed to let
+
+            const busWidth = 180 * 1.0; // Original width * new scale (from 150 to 180)
+            const busHeight = 90 * 1.0; // Original height * new scale
+
+            // Store unit sign elements and their approximate X positions for highlighting
+            const unitSigns = [
+                { element: document.getElementById('unit-sign-1'), x: 250 },
+                { element: document.getElementById('unit-sign-2'), x: 400 },
+                { element: document.getElementById('unit-sign-3'), x: 550 },
+                { element: document.getElementById('unit-sign-4'), x: 700 },
+                { element: document.getElementById('unit-sign-5'), x: 750 }, // X-coordinate from the HTML
+                { element: document.getElementById('unit-sign-6'), x: 900 },
+                { element: document.getElementById('unit-sign-7'), x: 1100 },
+                { element: document.getElementById('pre-unit-sign'), x: 115 }
+            ];
+
+            // Get references to the period sign groups
+            const periodSign1 = document.getElementById('period-sign-1');
+            const periodSign3 = document.getElementById('period-sign-3');
+            const periodSign4 = document.getElementById('period-sign-4');
+
+            // Function to update bus position and rotation along the path
+            function updateBusPosition(newX) {
+                const svgRect = roadmapSvg.getBoundingClientRect();
+                // Calculate position relative to the SVG's internal coordinate system
+                // We're mapping the clientX (mouse/touch position) to a point along the path
+                // The 100 is the starting X of the roadPath, and 1100 is roughly the end X.
+                // This range (100 to 1100) covers the main horizontal extent of the path.
+                let normalizedX = (newX - svgRect.left - 100) / (1100 - 100);
+                normalizedX = Math.max(0, Math.min(1, normalizedX)); // Clamp between 0 and 1
+
+                currentPathLength = normalizedX * pathTotalLength;
+
+                const point = roadPath.getPointAtLength(currentPathLength);
+                const lookAheadLength = Math.min(currentPathLength + 1, pathTotalLength);
+                const lookAheadPoint = roadPath.getPointAtLength(lookAheadLength);
+                const angleRad = Math.atan2(lookAheadPoint.y - point.y, lookAheadPoint.x - point.x);
+                const angleDeg = angleRad * 180 / Math.PI;
+
+                schoolBus.setAttribute('transform', `translate(${point.x - busWidth / 2}, ${point.y - busHeight / 2}) rotate(${angleDeg}, ${busWidth / 2}, ${busHeight / 2}) scale(1.0)`);
+
+                // Highlight logic for unit signs (based on bus proximity)
+                const busCenterX = point.x; // Current X position of the bus center on the SVG
+
+                unitSigns.forEach(sign => {
+                    const activationZoneStart = sign.x - 75;
+                    const activationZoneEnd = sign.x + 75;
+
+                    if (busCenterX >= activationZoneStart && busCenterX <= activationZoneEnd) {
+                        sign.element.classList.add('unit-active');
+                    } else {
+                        sign.element.classList.remove('unit-active');
+                    }
+                });
+                // Period signs will now only highlight on hover, so no bus-proximity logic here.
+            }
+
+            // Initial bus position: Use the start of the road path
+            const initialRoadPathPoint = roadPath.getPointAtLength(0);
+            updateBusPosition(initialRoadPathPoint.x);
+
+            // Mouse events for bus dragging
+            schoolBus.addEventListener('mousedown', (e) => {
+                isDragging = true;
+                e.preventDefault();
+            });
+
+            roadmapSvg.addEventListener('mousemove', (e) => {
+                if (isDragging) {
+                    updateBusPosition(e.clientX);
+                }
+            });
+
+            roadmapSvg.addEventListener('mouseup', () => {
+                isDragging = false;
+            });
+
+            // Touch events for bus dragging
+            schoolBus.addEventListener('touchstart', (e) => {
+                isDragging = true;
+                e.preventDefault();
+            });
+
+            roadmapSvg.addEventListener('touchmove', (e) => {
+                if (isDragging && e.touches.length > 0) {
+                    updateBusPosition(e.touches[0].clientX);
+                }
+            });
+
+            roadmapSvg.addEventListener('touchend', () => {
+                isDragging = false;
+            });
+
+            // Hover events for Period Signs
+            function addHoverEffects(element) {
+                element.addEventListener('mouseover', () => {
+                    element.classList.add('unit-active');
+                });
+                element.addEventListener('mouseout', () => {
+                    element.classList.remove('unit-active');
+                });
+            }
+
+            addHoverEffects(periodSign1);
+            addHoverEffects(periodSign3);
+            addHoverEffects(periodSign4);
+
+
+            // Recalculate bus position and highlight on window resize
+            window.addEventListener('resize', () => {
+                pathTotalLength = roadPath.getTotalLength(); // Reassign pathTotalLength
+                const currentNormalizedPosition = currentPathLength / pathTotalLength;
+                const newInitialPoint = roadPath.getPointAtLength(currentNormalizedPosition * pathTotalLength);
+                updateBusPosition(newInitialPoint.x);
+            });
+        });
+    </script>
+</body>
+</html>
